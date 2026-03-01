@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Undangan Pernikahan</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+body{
+font-family:'Poppins',sans-serif;
+overflow-x:hidden;
+background:#ffffff;
+}
+
+/* OPENING SCREEN */
+.opening{
+position:fixed;
+width:100%;
+height:100vh;
+background:linear-gradient(to bottom,#e3f2ff,#fdf6f8);
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+text-align:center;
+z-index:9999;
+transition:1s ease;
+}
+
+.opening h2{
+font-family:'Playfair Display',serif;
+font-weight:400;
+color:#7aaad6;
+margin-bottom:10px;
+}
+
+.opening h1{
+font-family:'Playfair Display',serif;
+font-weight:600;
+color:#4f7ca8;
+margin-bottom:30px;
+}
+
+.open-btn{
+padding:12px 30px;
+border:none;
+border-radius:30px;
+background:linear-gradient(45deg,#dceeff,#f8d7e3);
+font-size:14px;
+letter-spacing:1px;
+cursor:pointer;
+box-shadow:0 10px 25px rgba(0,0,0,0.1);
+}
+
+/* HERO VIDEO */
+.hero{
+position:relative;
+width:100%;
+height:100vh;
+overflow:hidden;
+}
+
+.hero video{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+
+/* BUTTON AFTER VIDEO */
+.after-video-btn{
+position:absolute;
+bottom:80px;
+width:100%;
+text-align:center;
+opacity:0;
+transition:1s ease;
+pointer-events:none;
+}
+
+.after-video-btn button{
+padding:14px 35px;
+border:none;
+border-radius:40px;
+font-family:'Poppins',sans-serif;
+font-size:14px;
+letter-spacing:1px;
+background:linear-gradient(45deg,#dceeff,#f8d7e3);
+box-shadow:0 10px 30px rgba(0,0,0,0.15);
+cursor:pointer;
+}
+
+.after-video-btn.show{
+opacity:1;
+pointer-events:auto;
+}
+
+/* RSVP SECTION */
+.rsvp{
+min-height:100vh;
+background:linear-gradient(to bottom,#dceeff,#fdf6f8);
+padding:80px 20px 60px 20px;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+position:relative;
+}
+
+/* Lace Pattern */
+.rsvp::before{
+content:"";
+position:absolute;
+top:0;
+left:0;
+width:100%;
+height:100px;
+background:url('https://www.transparenttextures.com/patterns/white-lace.png');
+opacity:0.4;
+}
+
+.rsvp-card{
+background:white;
+max-width:500px;
+width:100%;
+padding:30px;
+border-radius:25px;
+box-shadow:0 15px 40px rgba(0,0,0,0.08);
+text-align:center;
+animation:fadeUp 1s ease forwards;
+}
+
+.rsvp-card h2{
+font-family:'Playfair Display',serif;
+color:#7aaad6;
+margin-bottom:20px;
+}
+
+iframe{
+width:100%;
+height:500px;
+border:none;
+border-radius:15px;
+}
+
+@keyframes fadeUp{
+from{opacity:0;transform:translateY(40px);}
+to{opacity:1;transform:translateY(0);}
+}
+</style>
+</head>
+
+<body>
+
+<!-- OPENING -->
+<div class="opening" id="opening">
+<h2>Kepada Yth.</h2>
+<h1 id="guestName">Tamu Undangan</h1>
+<button class="open-btn" onclick="openInvitation()">Buka Undangan</button>
+</div>
+
+<!-- HERO VIDEO -->
+<section class="hero">
+<video id="weddingVideo" autoplay muted playsinline>
+<source src="video-undangan.mp4" type="video/mp4">
+</video>
+
+<div class="after-video-btn" id="afterBtn">
+<button onclick="goToRSVP()">Konfirmasi Kehadiran</button>
+</div>
+
+</section>
+
+<!-- RSVP -->
+<section class="rsvp">
+  <div class="rsvp-card">
+    <h2>Konfirmasi Kehadiran</h2>
+    <iframe 
+      src="https://docs.google.com/forms/d/e/1FAIpQLScPklkCYQUOF0jm7LNg-cWF2QDgs_J5fFr0wjirrSLxv70vDw/viewform?embedded=true"
+      width="100%" 
+      height="900" 
+      frameborder="0" 
+      marginheight="0" 
+      marginwidth="0">
+      Memuat…
+    </iframe>
+  </div>
+</section>
+
+<script>
+
+/* Ambil Nama Tamu dari URL */
+const params = new URLSearchParams(window.location.search);
+const to = params.get("to");
+
+if(to){
+document.getElementById("guestName").innerText = decodeURIComponent(to);
+}
+
+/* Buka Undangan */
+function openInvitation(){
+
+// Hilangkan opening screen
+document.getElementById("opening").style.opacity="0";
+setTimeout(()=>{
+document.getElementById("opening").style.display="none";
+},1000);
+
+// Aktifkan suara video
+const video=document.getElementById("weddingVideo");
+video.muted=false;
+video.play();
+}
+
+/* Tampilkan tombol setelah video selesai */
+const video = document.getElementById("weddingVideo");
+const afterBtn = document.getElementById("afterBtn");
+
+video.addEventListener("ended", function(){
+afterBtn.classList.add("show");
+});
+
+/* Scroll ke RSVP */
+function goToRSVP(){
+document.querySelector(".rsvp").scrollIntoView({
+behavior:"smooth"
+});
+}
+
+</script>
+
+</body>
+</html>
